@@ -198,9 +198,9 @@
         loadContent('code');
     });
 
+    var myInterval
     function loadContent(section) {
         const mainContent = document.getElementById('mainContent');
-        
         // Update button states
         document.querySelectorAll('.nav-button').forEach(button => {
             button.classList.remove('active');
@@ -208,6 +208,10 @@
         event.target.classList.add('active');
 
         if (section === 'code') {
+            if (myInterval) {
+                clearInterval(myInterval);
+                myInterval = null; // Reset interval to avoid clearing non-existent interval later
+            }
             mainContent.innerHTML = `
                 <div id="code-section" class="content-section active">
                     <div class="buttons-grid">
@@ -222,7 +226,9 @@
                         <button class="run-button" onclick="runScript(9)">Machine 9</button>
                     </div>
                 </div>`;
-        } else if (section === 'camera') {
+        } 
+        else if (section === 'camera') 
+        {
             function renderCameraImages() {
                 fetch('config.json')
                 .then(response => response.json())
@@ -253,7 +259,10 @@
                 })
                 .catch(error => console.error('Error loading the config.json file', error));
             }
-            setInterval(renderCameraImages, 100);
+            if (myInterval) {
+                clearInterval(myInterval);
+            }
+            myInterval = setInterval(renderCameraImages, 100);
         }
     }
 
